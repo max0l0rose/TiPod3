@@ -14,13 +14,13 @@ public class HelloController {
 
 	@GetMapping(value = "/hello") //, produces = MediaType.APPLICATION_JSON_VALUE
 	HelloObject hello() {
-		HelloObject helloObject = new HelloObject("Hello message");
+		HelloObject helloObject = new HelloObject("Hello message", 1);
 		return helloObject;
 	}
 
 	@GetMapping("/hello2")
 	public Map<String, Object> greeting() {
-		return Collections.singletonMap("Map:", new HelloObject("Hello message"));
+		return Collections.singletonMap("Map:", new HelloObject("Hello message", 2));
 	}
 
 }

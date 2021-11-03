@@ -8,4 +8,5 @@ import lombok.Getter;
 public class HelloObject
 {
 	String message;
+	int value;
 }
