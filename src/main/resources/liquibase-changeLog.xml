@@ -1,1 +1,58 @@
-sdfsfsdf
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+<!--    <include file="db/changelog/2021/11/09-02-changelog.xml"/>-->
+
+<!--    <changeSet id="qqqqq" author="">-->
+<!--        <dropTable tableName="system_user"/>-->
+<!--        <sql>DROP TYPE RoleEnum</sql>-->
+<!--    </changeSet>-->
+
+
+<!--    <changeSet id="qq6" author="">-->
+<!--        <sql>CREATE TYPE RoleEnum AS ENUM ('ADMIN','ADMIN_READONLY', 'CLIENT')</sql>-->
+<!--    </changeSet>-->
+
+<!--    <changeSet id="qq7" author="">-->
+<!--        <createTable tableName="system_user">-->
+<!--            <column name="ID" type="UUID">-->
+<!--                <constraints primaryKey="true"></constraints>-->
+<!--            </column>-->
+<!--            <column name="FirstName" type="VARCHAR(128)"/>-->
+<!--            <column name="last_name" type="VARCHAR(128)"/>-->
+<!--        </createTable>-->
+<!--    </changeSet>-->
+
+<!--    -->
+<!--    <changeSet id="" author="">-->
+<!--        <addColumn tableName="system_user">-->
+<!--            <column name="email" type="VARCHAR(320)"/>-->
+<!--        </addColumn>-->
+<!--        <addColumn tableName="system_user">-->
+<!--            <column name="role" type="RoleEnum"/>-->
+<!--        </addColumn>-->
+<!--    </changeSet>-->
+
+<!--    <changeSet id="1" author="">-->
+<!--        <addColumn tableName="system_user">-->
+<!--            <column name="password" type="TEXT"/>-->
+<!--        </addColumn>-->
+<!--    </changeSet>-->
+
+
+<!--    <changeSet id="2" author="">-->
+<!--        <renameColumn tableName="system_user" columnDataType="String" oldColumnName="FirstName" newColumnName="first_name"/>-->
+<!--    </changeSet>-->
+
+<!--    <changeSet id="3" author="">-->
+<!--        <sql>-->
+<!--            INSERT INTO public.system_user (id, first_name, last_name, email, role, password) VALUES ('0adefad0-4167-11ec-ba1c-0242ac130002', 'Admin1', 'Evclipt', null, 'ADMIN', null);-->
+<!--            INSERT INTO public.system_user (id, first_name, last_name, email, role, password) VALUES ('aebdad26-4172-11ec-81d3-0242ac130003', 'AdminRO', 'Elarion', null, 'ADMIN_READONLY', null);-->
+<!--            INSERT INTO public.system_user (id, first_name, last_name, email, role, password) VALUES ('ba9b82da-4172-11ec-81d3-0242ac130003', 'Client1', 'Clint', null, 'CLIENT', null);-->
+<!--        </sql>-->
+<!--    </changeSet>-->
+
+</databaseChangeLog>
