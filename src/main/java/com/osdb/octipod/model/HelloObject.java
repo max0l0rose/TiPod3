@@ -1,22 +1,16 @@
 package com.osdb.octipod.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import java.io.Serializable;
 
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-@Table(name = "messages")
+@Getter
 public class HelloObject
 {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	Long id;
-
 	String message;
 }
