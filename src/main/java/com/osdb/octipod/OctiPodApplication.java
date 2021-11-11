@@ -78,8 +78,8 @@ public class OctiPodApplication {
 	@Value("${spring.profiles.active}")
 	String pActive;
 
-//	@Value("${qqq}")
-//	String activatedProperties;
+	@Value("${qqq}")
+	String qqq;
 
 	@Bean
 	//@Profile("!dev")
@@ -87,8 +87,9 @@ public class OctiPodApplication {
 	                             @Value("${application-version}")String appVersion
 	                             //,@Value("${springdoc.version}") String av
 	) {
-		System.out.println("-----------------pActive = " + pActive);
-//		System.out.println("-----------------qqq = " + activatedProperties);
+		System.out.println("--------------------------------pActive = " + pActive);
+		System.out.println("--------------------------------qqq = " + qqq);
+
 		return new OpenAPI().info(new Info().title("Application API-------")
 						.version(appVersion)
 						.description(appDescription)

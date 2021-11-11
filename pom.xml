@@ -17,13 +17,96 @@
         <java.version>1.8</java.version>
     </properties>
 
+    <profiles>
+
+        <profile>
+            <id>local</id>
+<!--            <activation>-->
+<!--                <activeByDefault>false</activeByDefault>-->
+<!--                <property>-->
+<!--                    <name>spring.profiles.active</name>-->
+<!--                    <value>mysql</value>-->
+<!--                </property>-->
+<!--            </activation>-->
+            <properties>
+                <mavenProfile1>local</mavenProfile1>
+            </properties>
+<!--            <dependencies>-->
+<!--                <dependency>-->
+<!--                    <groupId>mysql</groupId>-->
+<!--                    <artifactId>mysql-connector-java</artifactId>-->
+<!--                    <version>8.0.26</version>-->
+<!--                </dependency>-->
+<!--            </dependencies>-->
+        </profile>
+
+        <profile>
+            <id>dev</id>
+            <properties>
+                <mavenProfile1>dev</mavenProfile1>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>stage</id>
+            <properties>
+                <mavenProfile1>stage</mavenProfile1>
+            </properties>
+        </profile>
+
+
+<!--        <profile>-->
+<!--            <id>mysql1</id>-->
+<!--            <activation>-->
+<!--                <activeByDefault>false</activeByDefault>-->
+<!--                <property>-->
+<!--                    <name>spring.profiles.active</name>-->
+<!--                    <value>mysql</value>-->
+<!--                </property>-->
+<!--            </activation>-->
+<!--            <properties>-->
+<!--                <qqq>mysql</qqq>-->
+<!--            </properties>-->
+<!--            <dependencies>-->
+<!--                <dependency>-->
+<!--                    <groupId>mysql</groupId>-->
+<!--                    <artifactId>mysql-connector-java</artifactId>-->
+<!--                    <version>8.0.26</version>-->
+<!--                </dependency>-->
+<!--            </dependencies>-->
+<!--        </profile>-->
+
+<!--        <profile>-->
+<!--            <id>postgres1</id>-->
+<!--            <activation>-->
+<!--                <activeByDefault>false</activeByDefault>-->
+<!--                <property>-->
+<!--                    <name>spring.profiles.active</name>-->
+<!--                    <value>postgres</value>-->
+<!--                </property>-->
+<!--            </activation>-->
+<!--            <properties>-->
+<!--                <qqq>postgres</qqq>-->
+<!--            </properties>-->
+<!--            <dependencies>-->
+<!--                &lt;!&ndash; https://mvnrepository.com/artifact/org.postgresql/postgresql &ndash;&gt;-->
+<!--                <dependency>-->
+<!--                    <groupId>org.postgresql</groupId>-->
+<!--                    <artifactId>postgresql</artifactId>-->
+<!--                    <version>42.2.23</version>-->
+<!--                </dependency>-->
+<!--            </dependencies>-->
+<!--        </profile>-->
+    </profiles>
+
+
     <dependencies>
 
-<!--        <dependency>-->
-<!--            <groupId>org.postgresql</groupId>-->
-<!--            <artifactId>postgresql</artifactId>-->
-<!--            <version>42.2.23</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.2.23</version>
+        </dependency>
 
 <!--        <dependency>-->
 <!--            <groupId>mysql</groupId>-->
@@ -87,52 +170,6 @@
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
     </dependencies>
-
-    <profiles>
-        <profile>
-            <id>mysql1</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-                <property>
-                    <name>spring.profiles.active</name>
-                    <value>mysql</value>
-                </property>
-            </activation>
-            <properties>
-                <qqq>mysql</qqq>
-            </properties>
-            <dependencies>
-                <dependency>
-                    <groupId>mysql</groupId>
-                    <artifactId>mysql-connector-java</artifactId>
-                    <version>8.0.26</version>
-                </dependency>
-            </dependencies>
-        </profile>
-
-        <profile>
-            <id>postgres1</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-                <property>
-                    <name>spring.profiles.active</name>
-                    <value>postgres</value>
-                </property>
-            </activation>
-            <properties>
-                <qqq>postgres</qqq>
-            </properties>
-            <dependencies>
-                <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
-                <dependency>
-                    <groupId>org.postgresql</groupId>
-                    <artifactId>postgresql</artifactId>
-                    <version>42.2.23</version>
-                </dependency>
-            </dependencies>
-        </profile>
-    </profiles>
-
 
     <build>
         <plugins>
