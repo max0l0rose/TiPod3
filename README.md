@@ -24,9 +24,6 @@ docker run --name octipod-postgresql --restart=always -p 5432:5432 -e POSTGRES_P
 - Navigate to project directory
 - java -jar target/gtasearch-backend-1.O.O.jar
 
-###Swagger. REST APIs Documentation
-[openapi.json](openapi.json)
-
-
-###[Swagger IJI endpoint](http://localhost:8080/swagger-ui.html)
+###Swagger REST APIs Documentation. Swagger IJI endpoint.
+http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config
 

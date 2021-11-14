@@ -13,9 +13,10 @@ public class HelloController {
 	@CrossOrigin(origins = {"http://domain21.com"}//, methods = {RequestMethod.DELETE, RequestMethod.POST}
 	)
 	HelloObject hello() {
-		HelloObject helloObject = new HelloObject(1L, "Hello-world message");
+		HelloObject helloObject = new HelloObject(1L, "My hello-world message");
 		return helloObject;
 	}
+
 }
 
 
