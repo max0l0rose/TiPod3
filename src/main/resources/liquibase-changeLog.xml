@@ -5,6 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
 
+    <include file="16-01-changelog.xml"/>
     <changeSet id="init" author="mmarshal">
         <sql>CREATE TYPE RoleEnum AS ENUM ('ADMIN','ADMIN_READONLY', 'CLIENT')</sql>
 
@@ -28,5 +29,4 @@
                 'ba9b82da-4172-11ec-81d3-0242ac130003', 'Client1', 'Clint', 'c1@gmail.com', 'CLIENT', null);
         </sql>
     </changeSet>
-
 </databaseChangeLog>

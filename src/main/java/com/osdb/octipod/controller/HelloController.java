@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1")
 public class HelloController {
 
-	@RequestMapping(value = "/hello-world", method = {RequestMethod.PATCH, RequestMethod.GET//, RequestMethod.OPTIONS
+	@RequestMapping(value = "/hello-world", method = {RequestMethod.PUT, RequestMethod.GET//, RequestMethod.OPTIONS
 	}
 	)
 	@CrossOrigin(origins = {"http://domain21.com"}//, methods = {RequestMethod.DELETE, RequestMethod.POST}
