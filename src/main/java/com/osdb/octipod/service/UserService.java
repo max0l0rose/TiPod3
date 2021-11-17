@@ -22,7 +22,8 @@ public class UserService //implements MyService<SystemUser>
 
 
 	public Optional<SystemUser> findByEmail(String email) {
-		return userRepository.findByEmail(email);
+		Optional<SystemUser> op = userRepository.findByEmail(email);
+		return op;
 	}
 
 

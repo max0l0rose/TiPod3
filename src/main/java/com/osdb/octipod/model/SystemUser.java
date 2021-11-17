@@ -25,7 +25,7 @@ public class SystemUser {
 	@Column(name = "role")
 	private RoleEnum role;
 
-	@Lob
+	// @Lob ??
 	@Column(name = "password")
 	private String password;
 }
