@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
 
-    <include file="16-01-changelog.xml"/>
+<!--    <include file="16-01-changelog.xml"/>-->
     <changeSet id="init" author="mmarshal">
         <sql>CREATE TYPE RoleEnum AS ENUM ('ADMIN','ADMIN_READONLY', 'CLIENT')</sql>
 
@@ -22,11 +22,11 @@
 
         <sql>
             INSERT INTO public.system_user (id, first_name, last_name, email, role, password) VALUES (
-                '0adefad0-4167-11ec-ba1c-0242ac130002', 'Admin1', 'Evclipt', 'a1@gmail.com', 'ADMIN', null);
+                '0adefad0-4167-11ec-ba1c-0242ac130002', 'Admin1', 'Evclipt', 'a1@gmail.com', 'ADMIN', '$2a$12$cHIgHpN/9.9/DI4vS4sN7O74W/uihz1Y52VwxP3IquflCDlKNGKA2');
             INSERT INTO public.system_user (id, first_name, last_name, email, role, password) VALUES (
-                'aebdad26-4172-11ec-81d3-0242ac130003', 'AdminRO', 'Elarion', 'aro@gmail.com', 'ADMIN_READONLY', null);
+                'aebdad26-4172-11ec-81d3-0242ac130003', 'AdminRO', 'Elarion', 'aro@gmail.com', 'ADMIN_READONLY', '$2a$12$cHIgHpN/9.9/DI4vS4sN7O74W/uihz1Y52VwxP3IquflCDlKNGKA2');
             INSERT INTO public.system_user (id, first_name, last_name, email, role, password) VALUES (
-                'ba9b82da-4172-11ec-81d3-0242ac130003', 'Client1', 'Clint', 'c1@gmail.com', 'CLIENT', null);
+                'ba9b82da-4172-11ec-81d3-0242ac130003', 'Client1', 'Clint', 'c1@gmail.com', 'CLIENT', '$2a$12$cHIgHpN/9.9/DI4vS4sN7O74W/uihz1Y52VwxP3IquflCDlKNGKA2');
         </sql>
     </changeSet>
 </databaseChangeLog>

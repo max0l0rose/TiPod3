@@ -22,6 +22,7 @@ public class SystemUser {
 	@Column(name = "email", length = 320)
 	private String email;
 
+	@Enumerated(EnumType.STRING)
 	@Column(name = "role")
 	private RoleEnum role;
 

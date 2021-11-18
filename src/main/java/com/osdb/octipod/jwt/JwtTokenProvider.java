@@ -11,8 +11,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.WebUtils;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -22,7 +24,6 @@ import java.util.List;
 @Component
 public class JwtTokenProvider {
     @Value("${jwt.token.secret}")
-    //@Value("${unknown.param:some default}")
     private String secret;
 
     @Value("${jwt.token.expired}")
@@ -72,8 +73,12 @@ public class JwtTokenProvider {
     }
 
 
-    public String resolveToken(HttpServletRequest req) {
-        String bearerToken = req.getHeader("Authorization");
+    public String resolveToken(HttpServletRequest request) {
+        Cookie cookie = WebUtils.getCookie(request, "Authorization");
+        if (cookie == null)
+            return null;
+        String bearerToken = cookie.getValue();
+        //String bearerToken = req.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer_")) {
             return bearerToken.substring(7, bearerToken.length());
         }

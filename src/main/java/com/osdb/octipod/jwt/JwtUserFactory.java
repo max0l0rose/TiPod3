@@ -1,7 +1,16 @@
 package com.osdb.octipod.jwt;
 
+import com.osdb.octipod.model.RoleEnum;
 import com.osdb.octipod.model.SystemUser;
+import org.hibernate.mapping.Array;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public final class JwtUserFactory {
 
@@ -9,25 +18,21 @@ public final class JwtUserFactory {
     }
 
     public static JwtUserDetails create(SystemUser user) {
+        List<GrantedAuthority> grantedAuthorities = mapToGrantedAuthorities(Arrays.asList(user.getRole()));
         return new JwtUserDetails(
                 null, //user.getId(),
                 user.getFirstName(),
                 user.getPassword(),
-                new ArrayList<>(
-                        //user.getRole()
-                ),
+                grantedAuthorities,
                 true
-//                mapToGrantedAuthorities(new ArrayList<>(user.getRoles())),
-//                user.getStatus() == null || user.getStatus() == Status.ACTIVE
-                //user.getUpdated()
         );
     }
 
 
-//    private static List<GrantedAuthority> mapToGrantedAuthorities(List<Role> userRoles) {
-//        return userRoles.stream()
-//                .map(role ->
-//                        new SimpleGrantedAuthority(role.getName())
-//                ).collect(Collectors.toList());
-//    }
+    private static List<GrantedAuthority> mapToGrantedAuthorities(List<RoleEnum> userRoles) {
+        return userRoles.stream()
+                .map(role ->
+                        new SimpleGrantedAuthority(role.name())
+                ).collect(Collectors.toList());
+    }
 }

@@ -16,15 +16,11 @@ import java.io.IOException;
 
 @Component
 public class JwtTokenFilter extends //UsernamePasswordAuthenticationFilter
-                                    // BasicAuthenticationFilter
+                                    //BasicAuthenticationFilter
                                     GenericFilterBean
 {
     @Autowired
     JwtTokenProvider jwtTokenProvider;
-
-//    public JwtTokenFilter(JwtTokenProvider jwtTokenProvider) {
-//        this.jwtTokenProvider = jwtTokenProvider;
-//    }
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain filterChain)
@@ -34,6 +30,7 @@ public class JwtTokenFilter extends //UsernamePasswordAuthenticationFilter
         if (token != null && jwtTokenProvider.validateToken(token)) {
             Authentication auth = jwtTokenProvider.getAuthentication(token);
 
+            // twice ??
             if (auth != null) {
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
