@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-public class JwtTokenProvider {
+public class JwtTokenUtils {
     @Value("${jwt.token.secret}")
     private String secret;
 
@@ -86,6 +86,8 @@ public class JwtTokenProvider {
     }
 
 
+
+    //@CookieValue("foo") String fooCookie
     public boolean validateToken(String token) {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token);

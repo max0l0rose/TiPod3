@@ -1,10 +1,12 @@
 package com.osdb.octipod.controller;
 
-import com.osdb.octipod.jwt.JwtTokenProvider;
+import com.osdb.octipod.jwt.JwtTokenUtils;
 import com.osdb.octipod.model.HelloObject;
 import com.osdb.octipod.model.SystemUser;
 import com.osdb.octipod.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -12,21 +14,19 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 @RestController
 @RequestMapping("/api/v1/public/auth")
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class HelloController {
 
-	@Autowired
-	private AuthenticationManager authenticationManager;
+	final AuthenticationManager authenticationManager;
 
-	@Autowired
-	private JwtTokenProvider jwtTokenProvider;
+	final JwtTokenUtils jwtTokenProvider;
 
-	@Autowired
-	private UserService userService;
+	final  UserService userService;
 
 
 	@RequestMapping(value = "/hello-world", method = {RequestMethod.PUT, RequestMethod.GET//, RequestMethod.OPTIONS
@@ -63,4 +63,12 @@ public class HelloController {
 
 }
 
+
+//	@RequestMapping(
+//			value = { "/api/pojo/edit" },
+//			method = RequestMethod.POST,
+//			produces = "application/json",
+//			consumes = ["application/json"])
+//	@ResponseBody
+//	public Boolean editWinner( @RequestBody Pojo pojo) {
 

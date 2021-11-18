@@ -1,6 +1,6 @@
 package com.osdb.octipod.jwt;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -15,12 +15,12 @@ import java.io.IOException;
 
 
 @Component
+@RequiredArgsConstructor
 public class JwtTokenFilter extends //UsernamePasswordAuthenticationFilter
                                     //BasicAuthenticationFilter
                                     GenericFilterBean
 {
-    @Autowired
-    JwtTokenProvider jwtTokenProvider;
+    final JwtTokenUtils jwtTokenProvider;
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain filterChain)

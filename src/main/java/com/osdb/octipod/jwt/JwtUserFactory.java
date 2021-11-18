@@ -14,8 +14,8 @@ import java.util.stream.Collectors;
 
 public final class JwtUserFactory {
 
-    public JwtUserFactory() {
-    }
+//    public JwtUserFactory() {
+//    }
 
     public static JwtUserDetails create(SystemUser user) {
         List<GrantedAuthority> grantedAuthorities = mapToGrantedAuthorities(Arrays.asList(user.getRole()));
