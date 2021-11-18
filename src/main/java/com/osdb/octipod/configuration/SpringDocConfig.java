@@ -1,11 +1,14 @@
 package com.osdb.octipod.configuration;
 
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.servers.Server;
 import lombok.experimental.FieldDefaults;
+import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -48,5 +51,22 @@ public class SpringDocConfig {
 										.email("admin@octipod.com")
 						))
 				.servers(Collections.singletonList(new Server().url(appURL)));
+	}
+
+	@Bean
+	public OperationCustomizer customize() {
+		return (operation, handlerMethod) -> {
+			boolean isNotGet = !handlerMethod.getMethod().getName().contains("get");
+
+			if(isNotGet) {
+				return operation.addParametersItem(
+						new Parameter()
+								.in(ParameterIn.HEADER.toString())
+								.required(false)
+								.name("X-XSRF-TOKEN"));
+			}
+
+			return null;
+		};
 	}
 }
