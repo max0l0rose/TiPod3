@@ -31,6 +31,9 @@
             <properties>
                 <myMavenProfile>local</myMavenProfile>
             </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
         </profile>
 
         <profile>
