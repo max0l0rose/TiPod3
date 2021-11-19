@@ -48,7 +48,8 @@ public class HelloController {
 			, @RequestParam("password") String password
 			, HttpServletResponse httpServletResponse
 	) {
-		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email, password);
+		UsernamePasswordAuthenticationToken token =
+				new UsernamePasswordAuthenticationToken(email, password);
 		Authentication authentication =
 		authenticationManager.authenticate(token);
 

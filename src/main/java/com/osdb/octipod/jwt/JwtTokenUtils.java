@@ -2,6 +2,9 @@ package com.osdb.octipod.jwt;
 
 import com.osdb.octipod.model.RoleEnum;
 import io.jsonwebtoken.*;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -22,16 +25,17 @@ import java.util.Date;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class JwtTokenUtils {
     @Value("${jwt.token.secret}")
-    private String secret;
+    String secret;
 
     @Value("${jwt.token.expired}")
-    private long validityInMilliseconds;
+    long validityInMilliseconds;
 
 
-    @Autowired
-    private UserDetailsService userDetailsService;
+    final UserDetailsService userDetailsService;
 
 
     @Bean
@@ -53,11 +57,11 @@ public class JwtTokenUtils {
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 
-        return Jwts.builder()//
-                .setClaims(claims)//
-                .setIssuedAt(now)//
-                .setExpiration(validity)//
-                .signWith(SignatureAlgorithm.HS256, secret)//
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(validity)
+                .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
 
@@ -88,18 +92,19 @@ public class JwtTokenUtils {
 
 
     //@CookieValue("foo") String fooCookie
-    public boolean validateToken(String token) {
+    public boolean validateToken(String token) //throws JwtException, IllegalArgumentException
+    {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
 
             if (claims.getBody().getExpiration().before(new Date())) {
                 return false;
             }
-
             return true;
         } catch (JwtException | IllegalArgumentException e) {
-            throw new JwtAuthenticationException("JWT token is expired or invalid");
+//            throw new JwtAuthenticationException("JWT token is expired or invalid");
         }
+        return false;
     }
 
 

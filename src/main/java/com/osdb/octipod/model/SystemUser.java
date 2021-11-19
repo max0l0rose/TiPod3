@@ -1,32 +1,76 @@
 package com.osdb.octipod.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.experimental.FieldDefaults;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.UUID;
+
+import org.springframework.security.core.authority.AuthorityUtils;
 
 @Entity
 @Table(name = "system_user")
 @Data
-public class SystemUser {
+@FieldDefaults(level = AccessLevel.PROTECTED)
+public class SystemUser implements UserDetails
+{
 	@Id
 	@Column(name = "id", nullable = false)
-	private UUID id;
+	UUID id;
 
 	@Column(name = "first_name", length = 128)
-	private String firstName;
+	String firstName;
 
 	@Column(name = "last_name", length = 128)
-	private String lastName;
+	String lastName;
 
 	@Column(name = "email", length = 320)
-	private String email;
+	String email;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "role")
-	private RoleEnum role;
+	RoleEnum role;
 
 	// @Lob ??
 	@Column(name = "password")
-	private String password;
+	@JsonIgnore
+	String password;
+
+
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return AuthorityUtils.createAuthorityList(role.name());
+			// AuthorityUtils.authorityListToSet(AuthorityUtils.NO_AUTHORITIES);
+	}
+
+	@Override
+	public String getUsername() {
+		return email;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
 }

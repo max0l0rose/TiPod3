@@ -2,8 +2,10 @@ package com.osdb.octipod.jwt;
 
 import com.osdb.octipod.model.SystemUser;
 import com.osdb.octipod.service.UserService;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,13 +15,10 @@ import java.util.Optional;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class JwtUserDetailsService implements UserDetailsService {
-    private final UserService userService;
-
-    @Autowired
-    public JwtUserDetailsService(UserService userService) {
-        this.userService = userService;
-    }
+    final UserService userService;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -30,9 +29,10 @@ public class JwtUserDetailsService implements UserDetailsService {
                     + email + " not found");
         }
 
-        JwtUserDetails jwtUser = JwtUserFactory.create(op.get());
-        log.info("IN loadUserByUsername - user with email: {} successfully loaded",
-                email);
-        return jwtUser;
+        //JwtUserDetails jwtUser = JwtUserFactory.create(op.get());
+        log.info("IN loadUserByUsername - user with email: {} successfully loaded", email);
+
+        SystemUser user = op.get();
+		return user;
     }
 }

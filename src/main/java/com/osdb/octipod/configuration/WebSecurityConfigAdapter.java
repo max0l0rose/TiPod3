@@ -1,18 +1,21 @@
 package com.osdb.octipod.configuration;
 
-import com.osdb.octipod.jwt.JwtTokenFilter;
+import com.osdb.octipod.jwt2.JwtTokenFilter2;
+import com.osdb.octipod.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
@@ -46,6 +49,25 @@ public class WebSecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 	//private static final String ADMIN_ENDPOINT = "/api/v1/admin/**";
 	//private static final String LOGIN_ENDPOINT = "/api/v1/auth/login";
 
+	final UserRepository userRepository;
+
+	@Override
+	public void configure(AuthenticationManagerBuilder auth) throws Exception {
+//		auth.inMemoryAuthentication()
+//				.withUser("user1").password(
+//						//passwordEncoder().encode(
+//						 "pwd"
+//						// )
+//				)
+//				.authorities("ROLE_USER");
+		auth.userDetailsService(email -> userRepository
+				.findByEmail(email)
+				.orElseThrow(
+						() -> new UsernameNotFoundException(
+								String.format("User: %s, not found", email)
+						)
+				));
+	}
 
 	@Bean
 	@Override
@@ -62,31 +84,41 @@ public class WebSecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 //	@Autowired
 //	private JwtTokenProvider jwtTokenProvider;
 
-	final JwtTokenFilter jwtTokenFilter;
+	final JwtTokenFilter2 jwtTokenFilter;
 
 
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.csrf()
 				//.disable()
-				.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+					.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 				.and()
-				.authorizeRequests()
-//				//.antMatchers("/*").permitAll()
-//				.antMatchers("/api/v1/public/auth/hello-world").authenticated()
-				.antMatchers("/**/hello-world").authenticated()
-				.anyRequest().permitAll()
+					.sessionManagement()
+						.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
+					.authorizeRequests()
+	//				//.antMatchers("/*").permitAll()
+	//				.antMatchers("/api/v1/public/auth/hello-world").authenticated()
+					.antMatchers("/**/hello-world").authenticated()
+					.anyRequest().permitAll()
+	//				.and()
+	//				//.formLogin().disable()
+					//.httpBasic()
 
-//				//.formLogin().disable()
-				.httpBasic()
+
+					//.anyRequest()
+					//	.authenticated()
+
+	//				.and()
+	//					.oauth2ResourceServer()
+	//						.jwt();
 		;
 
-//		JwtTokenFilter jwtTokenFilter = new JwtTokenFilter(//jwtTokenProvider
-//		);
+////		JwtTokenFilter jwtTokenFilter = new JwtTokenFilter(//jwtTokenProvider
+////		);
 		httpSecurity.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
-
-		//http.addFilterAfter(new CustomFilter(), BasicAuthenticationFilter.class);
+//
+//		//http.addFilterAfter(new CustomFilter(), BasicAuthenticationFilter.class);
 	}
 
 
