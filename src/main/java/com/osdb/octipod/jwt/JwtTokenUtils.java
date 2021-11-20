@@ -8,12 +8,14 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.WebUtils;
 
 import javax.annotation.PostConstruct;
@@ -92,19 +94,21 @@ public class JwtTokenUtils {
 
 
     //@CookieValue("foo") String fooCookie
-    public boolean validateToken(String token) //throws JwtException, IllegalArgumentException
+    public boolean validateToken(String token) //throws JwtAuthenticationException //JwtException, IllegalArgumentException
     {
+        //MalformedJwtException
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
 
-            if (claims.getBody().getExpiration().before(new Date())) {
+            if (claims.getBody().getExpiration().before(new Date()))
                 return false;
-            }
+
             return true;
         } catch (JwtException | IllegalArgumentException e) {
-//            throw new JwtAuthenticationException("JWT token is expired or invalid");
+            throw new JwtAuthenticationException("JWT token is expired or invalid");
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "token error", e);
         }
-        return false;
+        //return false;
     }
 
 
