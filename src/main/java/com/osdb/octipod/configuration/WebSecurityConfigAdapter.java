@@ -1,28 +1,35 @@
 package com.osdb.octipod.configuration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.osdb.octipod.controller.AuthenticationCustomEntryPoint;
 import com.osdb.octipod.jwt2.JwtTokenFilter2;
+import com.osdb.octipod.model.HelloObject;
 import com.osdb.octipod.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.session.ChangeSessionIdAuthenticationStrategy;
+import org.springframework.security.web.authentication.session.CompositeSessionAuthenticationStrategy;
+import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.security.web.csrf.CsrfAuthenticationStrategy;
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 
 //@Configuration
 //@EnableGlobalMethodSecurity(
@@ -32,6 +39,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 //)
 //class MethodSecurityConfig extends GlobalMethodSecurityConfiguration {
 //}
+
 
 @Configuration
 @EnableWebSecurity
@@ -81,10 +89,35 @@ public class WebSecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 //		return new BCryptPasswordEncoder();
 //	}
 
-//	@Autowired
-//	private JwtTokenProvider jwtTokenProvider;
+	//@Bean
+	public AccessDeniedHandler accessDeniedHandler() {
+		return (request, response, ex) -> {
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+
+			ServletOutputStream out = response.getOutputStream();
+			new ObjectMapper().writeValue(out, new HelloObject(1L, "HttpServletResponse.SC_FORBIDDEN...."));
+			out.flush();
+		};
+	}
+
+	@Bean
+	public AuthenticationFailureHandler failureHandler() {
+		return (request, response, ex) -> {
+			throw ex;
+		};
+	}
 
 	final JwtTokenFilter2 jwtTokenFilter;
+
+
+//	@Bean
+//	public SessionAuthenticationStrategy sessionAuthenticationStrategy() {
+//		return new CompositeSessionAuthenticationStrategy(Arrays.asList(
+//				new ChangeSessionIdAuthenticationStrategy(),
+//				new CsrfAuthenticationStrategy(csrfTokenRepository())
+//		));
+//	}
 
 
 	@Override
@@ -101,7 +134,10 @@ public class WebSecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 	//				.antMatchers("/api/v1/public/auth/hello-world").authenticated()
 					.antMatchers("/**/hello-world").authenticated()
 					.anyRequest().permitAll()
-	//				.and()
+				.and()
+					.exceptionHandling().accessDeniedHandler(accessDeniedHandler())
+				.and()
+					.exceptionHandling().authenticationEntryPoint(new AuthenticationCustomEntryPoint())
 	//				//.formLogin().disable()
 					//.httpBasic()
 
@@ -109,15 +145,17 @@ public class WebSecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 					//.anyRequest()
 					//	.authenticated()
 
-	//				.and()
+				.and()
 	//					.oauth2ResourceServer()
 	//						.jwt();
-		;
 
+						.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
+						//.addFilterAfter(jwtTokenFilter, CsrfFilter.class)
+//		.apply(new JwtTokenFilterConfigurer())
+				;
 ////		JwtTokenFilter jwtTokenFilter = new JwtTokenFilter(//jwtTokenProvider
 ////		);
-		httpSecurity.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
-//
+
 //		//http.addFilterAfter(new CustomFilter(), BasicAuthenticationFilter.class);
 	}
 

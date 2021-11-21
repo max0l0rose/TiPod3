@@ -1,5 +1,7 @@
 package com.osdb.octipod.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.osdb.octipod.jwt.JwtAuthenticationException;
 import com.osdb.octipod.jwt.JwtTokenUtils;
 import com.osdb.octipod.model.HelloObject;
 import com.osdb.octipod.model.SystemUser;
@@ -7,11 +9,21 @@ import com.osdb.octipod.service.UserService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
@@ -60,6 +72,21 @@ public class HelloController {
 		httpServletResponse.addCookie(new Cookie("Authorization", "Bearer_" + jwtToken));
 
 		//return new ResponseEntity<String>(id,headers,HttpStatus.OK);
+	}
+
+
+//	@ExceptionHandler({
+////			Exception.class
+//			JwtAuthenticationException.class
+////			//,AccessDeniedException.class
+//	})
+	@ExceptionHandler(AuthenticationException.class)
+	@ResponseStatus(HttpStatus.FORBIDDEN)
+	public ResponseEntity<Object> handleAccessDeniedException(
+			Exception ex, WebRequest request) {
+		return new ResponseEntity<Object>(
+				"JwtAuthenticationException. Access denied message here",
+				new HttpHeaders(), HttpStatus.FORBIDDEN);
 	}
 
 }

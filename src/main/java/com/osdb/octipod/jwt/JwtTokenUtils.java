@@ -8,14 +8,17 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.util.WebUtils;
 
 import javax.annotation.PostConstruct;
@@ -37,7 +40,7 @@ public class JwtTokenUtils {
     long validityInMilliseconds;
 
 
-    final UserDetailsService userDetailsService;
+    //final UserDetailsService userDetailsService;
 
 
     @Bean
@@ -68,10 +71,10 @@ public class JwtTokenUtils {
     }
 
 
-    public Authentication getAuthentication(String token) {
-        UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsername(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
-    }
+//    public Authentication getAuthentication(String token) {
+//        UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsername(token));
+//        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+//    }
 
 
     public String getUsername(String token) {
@@ -93,23 +96,23 @@ public class JwtTokenUtils {
 
 
 
-    //@CookieValue("foo") String fooCookie
-    public boolean validateToken(String token) //throws JwtAuthenticationException //JwtException, IllegalArgumentException
-    {
-        //MalformedJwtException
-        try {
-            Jws<Claims> claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
-
-            if (claims.getBody().getExpiration().before(new Date()))
-                return false;
-
-            return true;
-        } catch (JwtException | IllegalArgumentException e) {
-            throw new JwtAuthenticationException("JWT token is expired or invalid");
-//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "token error", e);
-        }
-        //return false;
-    }
+//    //@CookieValue("foo") String fooCookie
+//    public boolean validateToken(String token) //throws JwtAuthenticationException //JwtException, IllegalArgumentException
+//    {
+//        //MalformedJwtException
+//        try {
+//            Jws<Claims> claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+//
+//            if (claims.getBody().getExpiration().before(new Date()))
+//                return false;
+//
+//            return true;
+//        } catch (JwtException | IllegalArgumentException e) {
+//            //throw new JwtAuthenticationException("JWT token is expired or invalid");
+//            //throw new ResponseStatusException(HttpStatus.NOT_FOUND, "token error", e);
+//        }
+//        return false;
+//    }
 
 
     private List<String> getRoleNames(List<RoleEnum> userRoles) {
@@ -124,6 +127,22 @@ public class JwtTokenUtils {
 
         return result;
     }
+
+
+    @ExceptionHandler({
+//			Exception.class
+            JwtAuthenticationException.class
+//			//,AccessDeniedException.class
+    })
+    //@ExceptionHandler(AuthenticationException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResponseEntity<Object> handleAccessDeniedException(
+            Exception ex, WebRequest request) {
+        return new ResponseEntity<Object>(
+                "JwtAuthenticationException. Access denied message here",
+                new HttpHeaders(), HttpStatus.FORBIDDEN);
+    }
+
 }
 
 
