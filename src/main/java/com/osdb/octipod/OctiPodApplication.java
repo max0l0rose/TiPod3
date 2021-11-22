@@ -229,10 +229,8 @@ public class OctiPodApplication {
 //			        Add sendgrid-java dependency
 //			        Add org.apache.velocity dependency
 //			        Configure VelocityEngine bean
-//			        SENDGRID CONFIGS
-//
-//			        apiKey: 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
-//			        fromEmail: dberchiyan@osdb.io
+//			        CONFIGS:
+
 
 
 
