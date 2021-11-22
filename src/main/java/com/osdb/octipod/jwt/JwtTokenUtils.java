@@ -129,20 +129,6 @@ public class JwtTokenUtils {
     }
 
 
-    @ExceptionHandler({
-//			Exception.class
-            JwtAuthenticationException.class
-//			//,AccessDeniedException.class
-    })
-    //@ExceptionHandler(AuthenticationException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ResponseEntity<Object> handleAccessDeniedException(
-            Exception ex, WebRequest request) {
-        return new ResponseEntity<Object>(
-                "JwtAuthenticationException. Access denied message here",
-                new HttpHeaders(), HttpStatus.FORBIDDEN);
-    }
-
 }
 
 

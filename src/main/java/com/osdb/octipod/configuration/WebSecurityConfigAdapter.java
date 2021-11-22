@@ -29,6 +29,7 @@ import org.springframework.security.web.csrf.CsrfTokenRepository;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 import java.util.Arrays;
 
 //@Configuration
@@ -77,6 +78,7 @@ public class WebSecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 				));
 	}
 
+
 	@Bean
 	@Override
 	public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -93,10 +95,14 @@ public class WebSecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 	public AccessDeniedHandler accessDeniedHandler() {
 		return (request, response, ex) -> {
 			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+			//response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
 			ServletOutputStream out = response.getOutputStream();
-			new ObjectMapper().writeValue(out, new HelloObject(1L, "HttpServletResponse.SC_FORBIDDEN...."));
+			PrintWriter printWriter = new PrintWriter(out);
+			//new ObjectMapper().writeValue(out, new HelloObject(1L, "HttpServletResponse.SC_FORBIDDEN...."));
+			//new ObjectMapper().writeValue(out, "HttpServletResponse.SC_FORBIDDEN....");
+			printWriter.write("HttpServletResponse.SC_FORBIDDEN....");
+			printWriter.flush();
 			out.flush();
 		};
 	}

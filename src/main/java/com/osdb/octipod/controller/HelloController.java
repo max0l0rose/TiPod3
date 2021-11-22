@@ -1,7 +1,6 @@
 package com.osdb.octipod.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.osdb.octipod.jwt.JwtAuthenticationException;
+import com.osdb.octipod.dto.LoginDTO;
 import com.osdb.octipod.jwt.JwtTokenUtils;
 import com.osdb.octipod.model.HelloObject;
 import com.osdb.octipod.model.SystemUser;
@@ -9,6 +8,7 @@ import com.osdb.octipod.service.UserService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,6 +25,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 
@@ -32,6 +33,7 @@ import java.util.Arrays;
 @RequestMapping("/api/v1/public/auth")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Slf4j
 public class HelloController {
 
 	final AuthenticationManager authenticationManager;
@@ -54,24 +56,36 @@ public class HelloController {
 
 	@RequestMapping(value = "/sign-in", method = {RequestMethod.POST//, RequestMethod.OPTIONS
 	}
+	//, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE}
 	)
-	void login(
-			@RequestParam("email") String email
-			, @RequestParam("password") String password
+	//LoginDTO
+	//@ResponseStatus(HttpStatus.OK)
+	ResponseEntity<String>
+	login(
+			//@RequestParam
+					String username
+			, //@RequestBody
+					  String password
+			//, LoginDTO loginDTOIn
 			, HttpServletResponse httpServletResponse
+			, HttpServletRequest httpServletRequest
 	) {
+		LoginDTO loginDTO = new LoginDTO(username, password);
+		log.info(loginDTO.getUsername() + " " + loginDTO.getPassword());
+
 		UsernamePasswordAuthenticationToken token =
-				new UsernamePasswordAuthenticationToken(email, password);
+				new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword());
 		Authentication authentication =
 		authenticationManager.authenticate(token);
 
-		SystemUser systemUser = userService.findByEmail(email).get();
+		SystemUser systemUser = userService.findByEmail(loginDTO.getUsername()).get();
 		// ---Auth passed---
-		String jwtToken = jwtTokenProvider.createToken(email, Arrays.asList(systemUser.getRole()));
+		String jwtToken = jwtTokenProvider.createToken(loginDTO.getUsername(), Arrays.asList(systemUser.getRole()));
 
 		httpServletResponse.addCookie(new Cookie("Authorization", "Bearer_" + jwtToken));
 
-		//return new ResponseEntity<String>(id,headers,HttpStatus.OK);
+		//return new ResponseEntity<>("qqqq", HttpStatus.OK);
+		return ResponseEntity.ok("Logged in...");
 	}
 
 
@@ -84,8 +98,8 @@ public class HelloController {
 	@ResponseStatus(HttpStatus.FORBIDDEN)
 	public ResponseEntity<Object> handleAccessDeniedException(
 			Exception ex, WebRequest request) {
-		return new ResponseEntity<Object>(
-				"JwtAuthenticationException. Access denied message here",
+		return new ResponseEntity<>(
+				"HelloController: AuthenticationException... ",
 				new HttpHeaders(), HttpStatus.FORBIDDEN);
 	}
 
