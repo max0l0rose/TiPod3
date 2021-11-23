@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -18,11 +19,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -40,7 +43,7 @@ public class HelloController {
 
 	final JwtTokenUtils jwtTokenProvider;
 
-	final  UserService userService;
+	//final UserService userService;
 
 
 	@RequestMapping(value = "/hello-world", method = {RequestMethod.PUT, RequestMethod.GET//, RequestMethod.OPTIONS
@@ -56,37 +59,52 @@ public class HelloController {
 
 	@RequestMapping(value = "/sign-in", method = {RequestMethod.POST//, RequestMethod.OPTIONS
 	}
-	//, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE}
 	)
-	//LoginDTO
-	//@ResponseStatus(HttpStatus.OK)
-	ResponseEntity<String>
-	login(
-			//@RequestParam
-					String username
-			, //@RequestBody
-					  String password
-			//, LoginDTO loginDTOIn
+	ResponseEntity<String> login(
+//			//@RequestParam
+			 String username
+//			, //@RequestBody
+					  , String password
+			, LoginDTO loginDTO1
+			//, @Autowired AuthenticationManager authenticationManager
 			, HttpServletResponse httpServletResponse
-			, HttpServletRequest httpServletRequest
+//			, HttpServletRequest httpServletRequest
 	) {
 		LoginDTO loginDTO = new LoginDTO(username, password);
-		log.info(loginDTO.getUsername() + " " + loginDTO.getPassword());
+		log.info("login: " + loginDTO.getUsername() + " " + loginDTO.getPassword());
 
 		UsernamePasswordAuthenticationToken token =
 				new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword());
-		Authentication authentication =
-		authenticationManager.authenticate(token);
+		Authentication authentication = authenticationManager.authenticate(token);
+		log.info("authenticated: " + loginDTO.getUsername() + " " + loginDTO.getPassword());
 
-		SystemUser systemUser = userService.findByEmail(loginDTO.getUsername()).get();
+		SystemUser systemUser = (SystemUser)authentication.getPrincipal(); //userService.findByEmail(loginDTO.getUsername()).get();
+
 		// ---Auth passed---
 		String jwtToken = jwtTokenProvider.createToken(loginDTO.getUsername(), Arrays.asList(systemUser.getRole()));
 
-		httpServletResponse.addCookie(new Cookie("Authorization", "Bearer_" + jwtToken));
+		httpServletResponse.addCookie(new Cookie(HttpHeaders.AUTHORIZATION, "Bearer_" + jwtToken));
 
-		//return new ResponseEntity<>("qqqq", HttpStatus.OK);
 		return ResponseEntity.ok("Logged in...");
 	}
+
+
+	@PostMapping(value = "/sign-out")
+	ResponseEntity<String> logout(
+			HttpServletResponse httpServletResponse
+			//, HttpServletRequest httpServletRequest
+	) //throws ServletException
+	{
+		//httpServletRequest.logout();
+		//SecurityContextHolder.clearContext();
+
+		Cookie cookie = new Cookie(HttpHeaders.AUTHORIZATION, null);
+		cookie.setMaxAge(0);
+		httpServletResponse.addCookie(cookie);
+
+		return ResponseEntity.ok("Logged out...");
+	}
+
 
 
 //	@ExceptionHandler({
@@ -95,18 +113,16 @@ public class HelloController {
 ////			//,AccessDeniedException.class
 //	})
 	@ExceptionHandler(AuthenticationException.class)
-	@ResponseStatus(HttpStatus.FORBIDDEN)
 	public ResponseEntity<Object> handleAccessDeniedException(
 			Exception ex, WebRequest request) {
 		return new ResponseEntity<>(
-				"HelloController: AuthenticationException... ",
+				"HelloController: AuthenticationException... " + ex.getMessage(),
 				new HttpHeaders(), HttpStatus.FORBIDDEN);
 	}
-
 }
 
 
-//	@RequestMapping(
+//	@RequestMapping( !!!!!!!!!!!!!!!!!!!!!!!!!
 //			value = { "/api/pojo/edit" },
 //			method = RequestMethod.POST,
 //			produces = "application/json",

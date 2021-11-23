@@ -83,7 +83,7 @@ public class JwtTokenUtils {
 
 
     public String resolveToken(HttpServletRequest request) {
-        Cookie cookie = WebUtils.getCookie(request, "Authorization");
+        Cookie cookie = WebUtils.getCookie(request, HttpHeaders.AUTHORIZATION);
         if (cookie == null)
             return null;
         String bearerToken = cookie.getValue();

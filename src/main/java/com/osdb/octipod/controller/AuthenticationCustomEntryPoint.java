@@ -15,7 +15,7 @@ public class AuthenticationCustomEntryPoint implements AuthenticationEntryPoint 
 
 	// goes if errors only
 	@Override
-	public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException {
+	public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException ex) throws IOException {
 		//logger.error(e.getLocalizedMessage(), e);
 //		String message = RestResponse.builder()
 //				.status(UNAUTHORIZED)
@@ -30,7 +30,7 @@ public class AuthenticationCustomEntryPoint implements AuthenticationEntryPoint 
 //		);
 
 		response.setStatus(HttpStatus.UNAUTHORIZED.value());
-		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-		response.getWriter().write("AuthenticationCustomEntryPoint: HttpStatus.UNAUTHORIZED....");
+		response.setContentType(MediaType.TEXT_HTML_VALUE);
+		response.getWriter().write("AuthenticationCustomEntryPoint: HttpStatus.UNAUTHORIZED... " + ex.getMessage());
 	}
 }

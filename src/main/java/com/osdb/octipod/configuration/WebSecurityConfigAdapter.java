@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
 import org.springframework.security.web.authentication.session.ChangeSessionIdAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.CompositeSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
@@ -26,11 +27,15 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfAuthenticationStrategy;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
+import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.util.Arrays;
+
+import static org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter.Directive.*;
 
 //@Configuration
 //@EnableGlobalMethodSecurity(
@@ -125,6 +130,8 @@ public class WebSecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 //		));
 //	}
 
+	private static final ClearSiteDataHeaderWriter.Directive[] SOURCE =
+			{CACHE, COOKIES, STORAGE, EXECUTION_CONTEXTS};
 
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -142,19 +149,29 @@ public class WebSecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 					.anyRequest().permitAll()
 				.and()
 					.exceptionHandling().accessDeniedHandler(accessDeniedHandler())
-				.and()
-					.exceptionHandling().authenticationEntryPoint(new AuthenticationCustomEntryPoint())
-	//				//.formLogin().disable()
-					//.httpBasic()
 
+//				.and()
+//					.logout(logout -> logout
+//										.logoutUrl("/logout")
+//										.addLogoutHandler(new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(SOURCE)))
+//					)
+
+//					.logout() // This is missing and is important
+//						.logoutUrl("/logout")
+						//.logoutSuccessUrl("/api/v1/public/auth/sign-in1")
+
+//					.exceptionHandling().authenticationEntryPoint(new AuthenticationCustomEntryPoint())
+//	//				//.formLogin().disable()
+//					//.httpBasic()
 
 					//.anyRequest()
 					//	.authenticated()
 
-				.and()
+//				.and()
 	//					.oauth2ResourceServer()
 	//						.jwt();
 
+				.and()
 						.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
 						//.addFilterAfter(jwtTokenFilter, CsrfFilter.class)
 //		.apply(new JwtTokenFilterConfigurer())
