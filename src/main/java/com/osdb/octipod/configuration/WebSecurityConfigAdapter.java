@@ -145,7 +145,7 @@ public class WebSecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 					.authorizeRequests()
 	//				//.antMatchers("/*").permitAll()
 	//				.antMatchers("/api/v1/public/auth/hello-world").authenticated()
-					.antMatchers("/**/hello-world").authenticated()
+					.antMatchers("/api/v1/private/**").authenticated()
 					.anyRequest().permitAll()
 				.and()
 					.exceptionHandling().accessDeniedHandler(accessDeniedHandler())

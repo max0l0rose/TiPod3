@@ -37,7 +37,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Slf4j
-public class HelloController {
+public class AuthController {
 
 	final AuthenticationManager authenticationManager;
 
@@ -46,27 +46,17 @@ public class HelloController {
 	//final UserService userService;
 
 
-	@RequestMapping(value = "/hello-world", method = {RequestMethod.PUT, RequestMethod.GET//, RequestMethod.OPTIONS
-	}
-	)
-	@CrossOrigin(origins = {"http://domain21.com"}//, methods = {RequestMethod.DELETE, RequestMethod.POST}
-	)
-	HelloObject hello() {
-		HelloObject helloObject = new HelloObject(1L, "My hello-world message");
-		return helloObject;
-	}
-
-
+	// ============================================================================================
 	@RequestMapping(value = "/sign-in", method = {RequestMethod.POST//, RequestMethod.OPTIONS
-	}
-	)
+	})
+	//Content-Type: application/x-www-form-urlencoded
 	ResponseEntity<String> login(
 //			//@RequestParam
 			 String username
 //			, //@RequestBody
 					  , String password
-			, LoginDTO loginDTO1
-			//, @Autowired AuthenticationManager authenticationManager
+			//, LoginDTO loginDTO1
+			//, @Autowired AuthenticationManager authenticationManager // ??????????????????
 			, HttpServletResponse httpServletResponse
 //			, HttpServletRequest httpServletRequest
 	) {
@@ -83,14 +73,37 @@ public class HelloController {
 		// ---Auth passed---
 		String jwtToken = jwtTokenProvider.createToken(loginDTO.getUsername(), Arrays.asList(systemUser.getRole()));
 
-		httpServletResponse.addCookie(new Cookie(HttpHeaders.AUTHORIZATION, "Bearer_" + jwtToken));
+		Cookie cookie = new Cookie(HttpHeaders.AUTHORIZATION, "Bearer_" + jwtToken);
+		cookie.setPath("/");
+		httpServletResponse.addCookie(cookie);
 
 		return ResponseEntity.ok("Logged in...");
 	}
 
 
+	// ============================================================================================
 	@PostMapping(value = "/sign-out")
 	ResponseEntity<String> logout(
+			HttpServletResponse httpServletResponse
+			//, HttpServletRequest httpServletRequest
+	) //throws ServletException
+	{
+		//httpServletRequest.logout();
+		//SecurityContextHolder.clearContext();
+
+		Cookie cookie = new Cookie(HttpHeaders.AUTHORIZATION, null);
+		cookie.setMaxAge(0);
+		cookie.setPath("/");
+		httpServletResponse.addCookie(cookie);
+
+		return ResponseEntity.ok("Logged out...");
+	}
+
+
+
+	// ============================================================================================
+	@GetMapping(value = "/userinfo")
+	ResponseEntity<String> userInfo(
 			HttpServletResponse httpServletResponse
 			//, HttpServletRequest httpServletRequest
 	) //throws ServletException
@@ -107,6 +120,9 @@ public class HelloController {
 
 
 
+	// ============================================================================================
+	// ============================================================================================
+	// ============================================================================================
 //	@ExceptionHandler({
 ////			Exception.class
 //			JwtAuthenticationException.class

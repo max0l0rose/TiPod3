@@ -39,7 +39,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 //			responseEntity = handleEveryException(ex, request);
 //		}
 		//return super.handleExceptionInternal(ex, body, headers, status, request);
-		return ResponseEntity.status(status).body(ex.getMessage() + " " + body);
+		return ResponseEntity.status(status).body("RestResponseEntityExceptionHandler: ex: " + ex.getMessage() + ", body: " + body);
 	}
 
 

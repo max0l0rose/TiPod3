@@ -177,6 +177,8 @@ public class OctiPodApplication {
 
 
 
+
+
 //	NEED TO DO
 //
 //			        Add /api/v1/public/auth/forgot-passowrd/step-1 API
@@ -195,6 +197,7 @@ public class OctiPodApplication {
 //
 //									                                                               204 – No Content
 //									                                                               400 – If the email address is invalid
+
 //									                                                               FORGOT PASSWORD STEP 2
 //
 //									                                                               REQUEST:
