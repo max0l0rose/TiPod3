@@ -33,4 +33,31 @@
         </insert>
     </changeSet>
 
+    <changeSet id="insert-00002" author="mmarshal">
+        <insert tableName="system_user">
+            <column name="id">f2b6f327-ef59-4679-9c9d-d74fda6c0ebd</column>
+            <column name="first_name">Annael</column>
+            <column name="last_name">Flower</column>
+            <column name="email">ann@google.com</column>
+            <column name="role">CLIENT</column>
+            <column name="password">$2a$12$cHIgHpN/9.9/DI4vS4sN7O74W/uihz1Y52VwxP3IquflCDlKNGKA2</column>
+        </insert>
+        <insert tableName="system_user">
+            <column name="id">ad9445bc-483e-4a4b-8335-33ae6bd77cd7</column>
+            <column name="first_name">Norton</column>
+            <column name="last_name">Commander</column>
+            <column name="email">nor@google.com</column>
+            <column name="role">CLIENT</column>
+            <column name="password">$2a$12$cHIgHpN/9.9/DI4vS4sN7O74W/uihz1Y52VwxP3IquflCDlKNGKA2</column>
+        </insert>
+        <insert tableName="system_user">
+            <column name="id">469cea6c-22bd-4968-b314-e92593d91ac4</column>
+            <column name="first_name">Pink</column>
+            <column name="last_name">Floyd</column>
+            <column name="email">pink@google.com</column>
+            <column name="role">CLIENT</column>
+            <column name="password">$2a$12$cHIgHpN/9.9/DI4vS4sN7O74W/uihz1Y52VwxP3IquflCDlKNGKA2</column>
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>

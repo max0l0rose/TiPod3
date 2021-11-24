@@ -130,7 +130,7 @@ public class JwtTokenFilter2 extends OncePerRequestFilter
 		} catch (JwtException e) {
 			//SecurityContextHolder.clearContext();
 			//resolver.resolveException(request, response, null, new JwtAuthenticationException("JWT token is expired or invalid.."));
-			//int a = 1;
+			e.printStackTrace();
 		}
 		chain.doFilter(request, response);
 	}

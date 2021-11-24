@@ -89,6 +89,29 @@ public class OctiPodApplication {
 
 //	NEED TO DO
 //
+//			        Add API for getting user by ID
+//			        Only users with ADMIN and ADMIN_READONLY roles should have an access
+//			        REQUEST EXAMPLE
+//
+//			        GET /api/v1/private/users/{id}
+//
+//					                           RESPONSE EXAMPLE
+//
+//					                           200 – OK
+//					                           403 – If the user doesn't have an access to perform the operation
+//
+//					                           {
+//						                           "id": "string",
+//						                           "firstName": "string",
+//						                           "lastName": "string",
+//						                           "email": "string",
+//						                           "role": "ROLE_ADMIN"
+//					                           }
+
+
+
+//	NEED TO DO
+//
 //			        Add API for getting all the users from DB
 //			        Sorting and pagination should be supported
 //			        Only users with ADMIN and ADMIN_READONLY roles should have an access
@@ -112,29 +135,6 @@ public class OctiPodApplication {
 //						                           "total": 0,
 //						                           "page": 0,
 //						                           "size": 0
-//					                           }
-
-
-
-//	NEED TO DO
-//
-//			        Add API for getting user by ID
-//			        Only users with ADMIN and ADMIN_READONLY roles should have an access
-//			        REQUEST EXAMPLE
-//
-//			        GET /api/v1/private/users/{id}
-//
-//					                           RESPONSE EXAMPLE
-//
-//					                           200 – OK
-//					                           403 – If the user doesn't have an access to perform the operation
-//
-//					                           {
-//						                           "id": "string",
-//						                           "firstName": "string",
-//						                           "lastName": "string",
-//						                           "email": "string",
-//						                           "role": "ROLE_ADMIN"
 //					                           }
 
 

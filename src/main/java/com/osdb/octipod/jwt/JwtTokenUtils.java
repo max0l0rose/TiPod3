@@ -110,6 +110,7 @@ public class JwtTokenUtils {
 //        } catch (JwtException | IllegalArgumentException e) {
 //            //throw new JwtAuthenticationException("JWT token is expired or invalid");
 //            //throw new ResponseStatusException(HttpStatus.NOT_FOUND, "token error", e);
+            //e.printStackTrace();
 //        }
 //        return false;
 //    }

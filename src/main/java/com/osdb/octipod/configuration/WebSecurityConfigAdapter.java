@@ -145,7 +145,7 @@ public class WebSecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 					.authorizeRequests()
 	//				//.antMatchers("/*").permitAll()
 	//				.antMatchers("/api/v1/public/auth/hello-world").authenticated()
-					.antMatchers("/api/v1/private/**").authenticated()
+					.antMatchers("/api/v1/private/**").hasAnyAuthority("ADMIN", "ADMIN_READONLY")
 					.anyRequest().permitAll()
 				.and()
 					.exceptionHandling().accessDeniedHandler(accessDeniedHandler())
@@ -162,7 +162,8 @@ public class WebSecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 
 //					.exceptionHandling().authenticationEntryPoint(new AuthenticationCustomEntryPoint())
 //	//				//.formLogin().disable()
-//					//.httpBasic()
+//				.and()
+//				.httpBasic().disable()
 
 					//.anyRequest()
 					//	.authenticated()
