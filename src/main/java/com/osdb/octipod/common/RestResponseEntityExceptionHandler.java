@@ -1,4 +1,4 @@
-package com.osdb.octipod.controller;
+package com.osdb.octipod.common;
 
 import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpHeaders;
@@ -30,6 +30,15 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 //		}
 		//return super.handleExceptionInternal(ex, body, headers, status, request);
 		return ResponseEntity.status(status).body("RestResponseEntityExceptionHandler: ex: " + ex.getMessage() + ", body: " + body);
+	}
+
+
+
+	@ExceptionHandler({BusinessException.class})
+	public ResponseEntity<Object> handleBusiness(
+			Exception ex
+	) {
+		return ResponseEntity.badRequest().body(ex.getMessage());
 	}
 
 

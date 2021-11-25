@@ -1,6 +1,8 @@
 package com.osdb.octipod.controller;
 
 import com.osdb.octipod.dto.LoginDTO;
+import com.osdb.octipod.dto.Step1DTO;
+import com.osdb.octipod.dto.Step2DTO;
 import com.osdb.octipod.dto.UserInfoDTO;
 import com.osdb.octipod.jwt.JwtTokenUtils;
 import com.osdb.octipod.model.SystemUser;
@@ -16,12 +18,16 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -32,8 +38,54 @@ import java.util.UUID;
 @Slf4j
 public class AuthController {
 	final AuthenticationManager authenticationManager;
-	final JwtTokenUtils jwtTokenProvider;
+	final JwtTokenUtils jwtTokenUtils;
 	final UserService userService;
+	final PasswordEncoder passwordEncoder;
+
+	// ============================================================================================
+	@PostMapping(value = "/forgot-passowrd/step-1")
+	ResponseEntity<String> forgotPassowrdStep1(
+			@RequestBody @Valid Step1DTO step1DTO
+	) {
+		try {
+			SystemUser systemUser = userService.findByEmail(step1DTO.getEmail()).get();
+			String jwtToken = jwtTokenUtils.createToken(systemUser.getUsername(), Arrays.asList(systemUser.getRole()));
+			return ResponseEntity.status(HttpStatus.NON_AUTHORITATIVE_INFORMATION).body(jwtToken);
+		} catch (NoSuchElementException ex) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+		}
+	}
+
+
+
+	// ============================================================================================
+	@PostMapping(value = "/forgot-passowrd/step-2")
+	ResponseEntity<String> forgotPassowrdStep2(
+			@RequestBody @Valid Step2DTO step2DTO
+	) {
+		try {
+			if (step2DTO.getToken() == null || step2DTO.getNewPassowrd() == null)
+				throw new IllegalArgumentException();
+
+			String username = jwtTokenUtils.getUsername(step2DTO.getToken());
+			SystemUser systemUser = userService.findByEmail(username).orElse(null);
+
+			//PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+			String pwd = passwordEncoder.encode(step2DTO.getNewPassowrd());
+			systemUser.setPassword(pwd);
+
+			userService.save(systemUser);
+
+			return ResponseEntity.ok().body("New password set...");
+		} catch (NoSuchElementException ex) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+		}
+		catch (IllegalArgumentException ex) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+		}
+	}
+
+
 
 	// ============================================================================================
 	@RequestMapping(value = "/sign-in", method = {RequestMethod.POST//, RequestMethod.OPTIONS
@@ -41,7 +93,7 @@ public class AuthController {
 	ResponseEntity<String> login(
 //			 String username
 //			, String password
-			@RequestBody LoginDTO loginDTO
+			@RequestBody @Valid LoginDTO loginDTO
 			//, @Autowired AuthenticationManager authenticationManager // ??????????????????
 			, HttpServletResponse httpServletResponse
 	) {
@@ -56,7 +108,7 @@ public class AuthController {
 		SystemUser systemUser = (SystemUser)authentication.getPrincipal(); //userService.findByEmail(loginDTO.getUsername()).get();
 
 		// ---Auth passed---
-		String jwtToken = jwtTokenProvider.createToken(loginDTO.getUsername(), Arrays.asList(systemUser.getRole()));
+		String jwtToken = jwtTokenUtils.createToken(loginDTO.getUsername(), Arrays.asList(systemUser.getRole()));
 
 		Cookie cookie = new Cookie(HttpHeaders.AUTHORIZATION, "Bearer_" + jwtToken);
 		cookie.setPath("/");
@@ -88,7 +140,7 @@ public class AuthController {
 	// ============================================================================================
 	@GetMapping(value = "/user")
 	ResponseEntity<UserInfoDTO> user(
-			@RequestParam UUID id
+			@RequestParam @Valid UUID id
 	) {
 		Optional<SystemUser> optionalSystemUser = userService.findById(id);
 		if (optionalSystemUser.isPresent()) {
@@ -112,7 +164,8 @@ public class AuthController {
 //	})
 	@ExceptionHandler(AuthenticationException.class)
 	public ResponseEntity<Object> handleAccessDeniedException(
-			Exception ex, WebRequest request) {
+			Exception ex
+	) {
 		return new ResponseEntity<>(
 				"HelloController: AuthenticationException... " + ex.getMessage(),
 				new HttpHeaders(), HttpStatus.FORBIDDEN);

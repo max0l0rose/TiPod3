@@ -15,10 +15,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.*;
 
 @RestController
@@ -27,19 +27,18 @@ import java.util.*;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Slf4j
 public class UsersController {
-
 	final UserService userService;
 
 
 	// ============================================================================================
 	@PatchMapping(value = "/{id}")
 	ResponseEntity<SystemUser> userPatch(
-			@PathVariable UUID id,
+			@PathVariable @Valid UUID id,
 //			@RequestParam(required = false) String firstName,
 //			@RequestParam(required = false) String lastName,
 //			@RequestParam(required = false) String role,
 //			@RequestParam Map<String, String> reqParam
-			@RequestBody UserInfoPutDTO userInfoPutDTO
+			@RequestBody @Valid UserInfoPutDTO userInfoPutDTO
 	) {
 		try {
 			SystemUser systemUser = userService.findById(id).get();
@@ -83,11 +82,11 @@ public class UsersController {
 			//, consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE}
 	)
 	ResponseEntity<SystemUser> userPut(
-			@PathVariable UUID id,
+			@PathVariable @Valid UUID id,
 			//@RequestParam String firstName,
 //			@RequestParam(defaultValue = "") String lastName,
 //			@RequestParam String role
-			@RequestBody UserInfoPutDTO userInfoPutDTO
+			@RequestBody @Valid UserInfoPutDTO userInfoPutDTO
 			//@RequestParam Map<String, String> reqParam
 	) {
 		try {
@@ -130,7 +129,7 @@ public class UsersController {
 			return ResponseEntity.ok(pageSystemUser.getContent());
 		}
 		catch (IllegalArgumentException | NoSuchElementException | PropertyReferenceException | StringIndexOutOfBoundsException ex) {
-			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(Collections.emptyList());
+			return ResponseEntity.badRequest().body(Collections.emptyList());
 		}
 	}
 
@@ -139,7 +138,7 @@ public class UsersController {
 	// ============================================================================================
 	@GetMapping(value = "/{id}")
 	ResponseEntity<SystemUser> userInfo(
-			@PathVariable UUID id
+			@PathVariable @Valid UUID id
 	) {
 		try {
 			SystemUser systemUser = userService.findById(id).get();
@@ -148,9 +147,6 @@ public class UsersController {
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new SystemUser());
 	}
-
-
-
 
 
 

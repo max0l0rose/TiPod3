@@ -1,14 +1,10 @@
 package com.osdb.octipod.configuration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.osdb.octipod.controller.AuthenticationCustomEntryPoint;
 import com.osdb.octipod.jwt2.JwtTokenFilter2;
-import com.osdb.octipod.model.HelloObject;
 import com.osdb.octipod.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,23 +15,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
-import org.springframework.security.web.authentication.session.ChangeSessionIdAuthenticationStrategy;
-import org.springframework.security.web.authentication.session.CompositeSessionAuthenticationStrategy;
-import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.csrf.CsrfAuthenticationStrategy;
-import org.springframework.security.web.csrf.CsrfFilter;
-import org.springframework.security.web.csrf.CsrfTokenRepository;
-import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
-import java.util.Arrays;
-
-import static org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter.Directive.*;
 
 //@Configuration
 //@EnableGlobalMethodSecurity(
@@ -59,9 +42,6 @@ public class WebSecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 //				.authorities("ROLE_USER");
 //	}
 
-
-	//private static final String ADMIN_ENDPOINT = "/api/v1/admin/**";
-	//private static final String LOGIN_ENDPOINT = "/api/v1/auth/login";
 
 	final UserRepository userRepository;
 
@@ -90,11 +70,6 @@ public class WebSecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 		return super.authenticationManagerBean();
 	}
 
-
-//	@Bean
-//	public PasswordEncoder passwordEncoder() {
-//		return new BCryptPasswordEncoder();
-//	}
 
 	//@Bean
 	public AccessDeniedHandler accessDeniedHandler() {
@@ -130,8 +105,9 @@ public class WebSecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 //		));
 //	}
 
-	private static final ClearSiteDataHeaderWriter.Directive[] SOURCE =
-			{CACHE, COOKIES, STORAGE, EXECUTION_CONTEXTS};
+//	private static final ClearSiteDataHeaderWriter.Directive[] SOURCE =
+//			{CACHE, COOKIES, STORAGE, EXECUTION_CONTEXTS};
+
 
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {

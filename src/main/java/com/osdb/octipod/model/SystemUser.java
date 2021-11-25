@@ -48,6 +48,17 @@ public class SystemUser implements UserDetails
 	String password;
 
 
+	@Override
+	public String toString() {
+		return "SystemUser{" +
+				       "id=" + id +
+				       ", firstName='" + firstName + '\'' +
+				       ", lastName='" + lastName + '\'' +
+				       ", email='" + email + '\'' +
+				       ", role=" + role +
+//				       ", password='" + password + '\'' +
+				       '}';
+	}
 
 	@Override
 	@JsonIgnore
