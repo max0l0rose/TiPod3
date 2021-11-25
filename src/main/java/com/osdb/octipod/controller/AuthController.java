@@ -45,7 +45,6 @@ public class AuthController {
 			//, LoginDTO loginDTO1
 			//, @Autowired AuthenticationManager authenticationManager // ??????????????????
 			, HttpServletResponse httpServletResponse
-//			, HttpServletRequest httpServletRequest
 	) {
 		LoginDTO loginDTO = new LoginDTO(username, password);
 		log.info("login: " + loginDTO.getUsername() + " " + loginDTO.getPassword());
@@ -64,7 +63,7 @@ public class AuthController {
 		cookie.setPath("/");
 		httpServletResponse.addCookie(cookie);
 
-		return ResponseEntity.ok("Logged in...");
+		return ResponseEntity.ok("Logged in: " + loginDTO);
 	}
 
 
@@ -72,9 +71,7 @@ public class AuthController {
 	@PostMapping(value = "/sign-out")
 	ResponseEntity<String> logout(
 			HttpServletResponse httpServletResponse
-			//, HttpServletRequest httpServletRequest
-	) //throws ServletException
-	{
+	) {
 		//httpServletRequest.logout();
 		//SecurityContextHolder.clearContext();
 

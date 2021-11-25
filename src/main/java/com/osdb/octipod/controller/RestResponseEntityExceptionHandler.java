@@ -1,24 +1,14 @@
 package com.osdb.octipod.controller;
 
 import io.jsonwebtoken.JwtException;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
 
 //@ControllerAdvice
 @RestControllerAdvice
@@ -48,9 +38,9 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 //			Exception.class
 			JwtException.class
 //			//,AccessDeniedException.class
+			//AuthenticationException.class
 	})
-	//@ExceptionHandler(AuthenticationException.class)
-	@ResponseStatus(HttpStatus.FORBIDDEN)
+	//@ResponseStatus(HttpStatus.FORBIDDEN)
 	public ResponseEntity<Object> handleAccessDeniedException(
 			Exception ex, WebRequest request) {
 		return new ResponseEntity<Object>(

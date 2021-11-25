@@ -4,10 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -17,6 +19,7 @@ import org.springframework.security.core.authority.AuthorityUtils;
 @Table(name = "system_user")
 @Data
 @FieldDefaults(level = AccessLevel.PROTECTED)
+@DynamicUpdate
 public class SystemUser implements UserDetails
 {
 	@Id
@@ -24,12 +27,15 @@ public class SystemUser implements UserDetails
 	UUID id;
 
 	@Column(name = "first_name", length = 128)
+	@NotNull
 	String firstName;
 
 	@Column(name = "last_name", length = 128)
+	@NotNull
 	String lastName;
 
 	@Column(name = "email", length = 320)
+	@NotNull
 	String email;
 
 	@Enumerated(EnumType.STRING)

@@ -2,11 +2,6 @@ package com.osdb.octipod;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
-import org.springframework.context.annotation.Configuration;
-
-import org.springframework.security.core.authority.AuthorityUtils;
 
 @SpringBootApplication(
 		//exclude = {ErrorMvcAutoConfiguration.class}
@@ -49,12 +44,20 @@ public class OctiPodApplication {
 //	}
 
 
+//	@Bean
+//	public ModelMapper modelMapper() {
+//		return new ModelMapper();
+//	}
+
+
 	public static void main(String[] args) {
 		SpringApplication.run(OctiPodApplication.class, args);
 	}
 }
 
-
+// =============================================================================================================
+// =============================================================================================================
+// =============================================================================================================
 //	NEED TO DO
 //
 //			        Implement API for getting auth user details
@@ -136,7 +139,6 @@ public class OctiPodApplication {
 //						                           "page": 0,
 //						                           "size": 0
 //					                           }
-
 
 
 //	NEED TO DO

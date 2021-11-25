@@ -15,4 +15,12 @@ public class LoginDTO {
 	@NotNull
 	@Size(min = 4)
 	String password;
+
+	@Override
+	public String toString() {
+		return "LoginDTO{" +
+				       "username='" + username + '\'' +
+//				       ", password='" + password + '\'' +
+				       '}';
+	}
 }

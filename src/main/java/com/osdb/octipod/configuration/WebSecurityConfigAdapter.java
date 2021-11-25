@@ -106,7 +106,7 @@ public class WebSecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 			PrintWriter printWriter = new PrintWriter(out);
 			//new ObjectMapper().writeValue(out, new HelloObject(1L, "HttpServletResponse.SC_FORBIDDEN...."));
 			//new ObjectMapper().writeValue(out, "HttpServletResponse.SC_FORBIDDEN....");
-			printWriter.write("HttpServletResponse.SC_FORBIDDEN....");
+			printWriter.write("WebSecurityConfigAdapter: AccessDeniedHandler: HttpServletResponse.SC_FORBIDDEN....");
 			printWriter.flush();
 			out.flush();
 		};
@@ -136,9 +136,9 @@ public class WebSecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.csrf()
-				//.disable()
-					.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-				.and()
+					.disable()
+					//.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+				//.and()
 					.sessionManagement()
 						.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
