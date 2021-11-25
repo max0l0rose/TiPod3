@@ -38,15 +38,14 @@ public class AuthController {
 	// ============================================================================================
 	@RequestMapping(value = "/sign-in", method = {RequestMethod.POST//, RequestMethod.OPTIONS
 	})
-	//Content-Type: application/x-www-form-urlencoded
 	ResponseEntity<String> login(
-			 String username
-			, String password
-			//, LoginDTO loginDTO1
+//			 String username
+//			, String password
+			@RequestBody LoginDTO loginDTO
 			//, @Autowired AuthenticationManager authenticationManager // ??????????????????
 			, HttpServletResponse httpServletResponse
 	) {
-		LoginDTO loginDTO = new LoginDTO(username, password);
+		//LoginDTO loginDTO = new LoginDTO(username, password);
 		log.info("login: " + loginDTO.getUsername() + " " + loginDTO.getPassword());
 
 		UsernamePasswordAuthenticationToken token =
