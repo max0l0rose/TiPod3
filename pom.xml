@@ -9,11 +9,11 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.osdb</groupId>
-    <artifactId>octipod</artifactId>
+    <groupId>com.company</groupId>
+    <artifactId>tipod</artifactId>
     <version>1.0.0</version>
-    <name>octipod</name>
-    <description>octipod</description>
+    <name>tipod</name>
+    <description>tipod</description>
 
     <properties>
         <java.version>11</java.version>

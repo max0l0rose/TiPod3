@@ -10,8 +10,8 @@
         <insert tableName="system_user">
             <column name="id">0adefad0-4167-11ec-ba1c-0242ac130002</column>
             <column name="first_name">Davyd</column>
-            <column name="last_name">Berchiyan</column>
-            <column name="email">dberchiyan@osdb.io</column>
+            <column name="last_name">Bbb</column>
+            <column name="email">dbbb@qqq.io</column>
             <column name="role">ADMIN</column>
             <column name="password">$2a$12$cHIgHpN/9.9/DI4vS4sN7O74W/uihz1Y52VwxP3IquflCDlKNGKA2</column>
         </insert>
@@ -19,15 +19,15 @@
             <column name="id">aebdad26-4172-11ec-81d3-0242ac130003</column>
             <column name="first_name">Maksym</column>
             <column name="last_name">Marshal</column>
-            <column name="email">mmarshal@osdb.io</column>
+            <column name="email">mmarshal@qqq.io</column>
             <column name="role">ADMIN_READONLY</column>
             <column name="password">$2a$12$cHIgHpN/9.9/DI4vS4sN7O74W/uihz1Y52VwxP3IquflCDlKNGKA2</column>
         </insert>
         <insert tableName="system_user">
             <column name="id">ba9b82da-4172-11ec-81d3-0242ac130003</column>
             <column name="first_name">Bohdan</column>
-            <column name="last_name">Guriev</column>
-            <column name="email">bguriev@osdb.io</column>
+            <column name="last_name">Ggggg</column>
+            <column name="email">bgggg@qqq.io</column>
             <column name="role">CLIENT</column>
             <column name="password">$2a$12$cHIgHpN/9.9/DI4vS4sN7O74W/uihz1Y52VwxP3IquflCDlKNGKA2</column>
         </insert>

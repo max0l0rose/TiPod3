@@ -1,4 +1,4 @@
-# OctiPod BACKEND
+# tiPod BACKEND
 
 ### Technologies
 
@@ -17,7 +17,7 @@
 
 ### Docker => DB
 
-docker run --name octipod-postgresql --restart=always -p 5432:5432 -e POSTGRES_PASSWORD=YDRPj943KOtoWOhy -e POSTGRES_USER=octipod -e POSTGRES_DB=octipod -d postgres:13
+docker run --name tipod-postgresql --restart=always -p 5432:5432 -e POSTGRES_PASSWORD=YDRPj943KOtoWOhy -e POSTGRES_USER=tipod -e POSTGRES_DB=tipod -d postgres:13
 
 ### Build Application
 
@@ -27,7 +27,7 @@ docker run --name octipod-postgresql --restart=always -p 5432:5432 -e POSTGRES_P
 ### Run Application
 
 - Navigate to project directory
-- java -jar target/octipod-1.0.0.jar
+- java -jar target/tipod-1.0.0.jar
 
 ### Swagger
 
